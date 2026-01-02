@@ -1,0 +1,73 @@
+:root {
+    --purple: #0d0221;
+    --white: #f0f0f0;
+    --orange: #fb5607;
+    --cyan: #00fff9;
+    --other-purple: #b900ff;
+    --pink: #ff006e;
+    --other-pink: #ff2a6d;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    justify-content: flex-start;
+    background-color: var(--purple);
+    color: var(--white);
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    width: 100%;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color:var(--white);
+    background-image: url('assets/bg.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 250px;
+    width: 100%;
+}
+
+
+.search-area {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: -20px;
+}
+
+.search-bar {
+    border-radius: 20px;
+    padding: 0px 20px;
+    background-color: var(--orange);
+    border: 1px solid var(--other-purple);
+    height: 40px;
+    width: 250px;
+    color: var(--white);
+   
+
+}
+.search-icon {
+    position: absolute;
+    right: 35%;
+    top: 50%;
+    transform: translateY(-50%); /*always used in tandem as top % puts the icon's top edge at 50% from bottom or bottom edge at 50% from top; so translateY pushes it up 50% its own height acheiving true vertical centering*/
+    color: var(--cyan);
+    font-size: 18px;
+}
+
