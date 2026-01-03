@@ -1,8 +1,8 @@
-// http://www.omdbapi.com/?s=thor&apikey=23df0941
+// http://www.omdbapi.com/?s=thor&apikey=605455b9
 
 //&page=1
 
-// http://www.omdbapi.com/?apikey=23df0941&i=tt3896198
+// http://www.omdbapi.com/?apikey=605455b9&i=tt3896198
 
 let movies = [];
 
@@ -19,7 +19,7 @@ function searchedTitle() {
 
 async function getMovies(title) {
   const response = await fetch(
-    `http://www.omdbapi.com/?s=${title}&apikey=23df0941`
+    `http://www.omdbapi.com/?s=${title}&apikey=605455b9`
   );
   const data = await response.json();
   let searchResults = data.Search || []; /* Search is the array
@@ -33,14 +33,26 @@ async function getMovies(title) {
   await getFullDetails(searchResults);
 }
 
+// async function getFullDetails(searchResults) {
+//   return Promise.all(
+//     searchResults.map(async (searchResult) => {
+//       const data = await fetch(
+//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=605455b9`
+//       );
+//       movies = await data.json();
+//       return movies;
+//     })
+//   );
+// } /* TRICKY###. if we just overwrite movies array like that all it will end up with is the last ever movie. movies is our global array. instead we use a local movie variable (NOT an array) which gathers up all the movie obejcts and finally we assign that to our movies array */
+
 async function getFullDetails(searchResults) {
-  await Promise.all(
+  movies = await Promise.all(
     searchResults.map(async (searchResult) => {
       const data = await fetch(
-        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=605455b9`
       );
-      movies = await data.json();
-      return movies;
+      const movie = await data.json();
+      return movie; /* movie is in scope of this map function and won't overwrite itself everytime we map. on each map we essentially get a different movie ### also all the maps happen CONCURRENTLY###*/
     })
   );
 }
@@ -88,7 +100,7 @@ async function renderMovies(title) {
               <span class = "bold-text">Type:</span> ${movie.Type} 
           </div>
           <div class="ratings">
-          ${displayAllRatings(movie.Ratings)}
+          ${displayAllRatings(movie)}
           </div>
         </div>
     </div>`
@@ -96,25 +108,51 @@ async function renderMovies(title) {
     .join('');
 }
 
-function displayAllRatings(ratings) {
+function displayAllRatings(movie) {
+  ratings = movie.Ratings;
+  imdbID = movie.imdbID;
+
+  changedTitleTomato = movie.Title.replaceAll(' ', '_')
+    .replaceAll(',', '')
+    .replaceAll(':', '')
+    .replaceAll('-', '_');
+  changedTitleMeta = movie.Title.replaceAll(' ', '-')
+    .replaceAll(',', '')
+    .replaceAll(':', '')
+    .toLowerCase();
+  slicedType = movie.Type.slice(0, 1);
+  metaType = movie.Type === 'movie' ? 'movie' : 'tv';
+
   return ratings
     .map((rating) => {
       if (rating.Source === 'Internet Movie Database') {
-        return `<img src = "assets/imdb.webp" width = "25" height = "25">${rating.Value}`;
+        return `<a href = "https://www.imdb.com/title/${imdbID}/"><img src = "assets/imdb.webp" width = "35" height = "35"></a>${rating.Value.slice(
+          0,
+          rating.Value.indexOf('/')
+        )}`;
       }
       if (rating.Source === 'Rotten Tomatoes') {
         return parseFloat(rating.Value) >= 75
-          ? `<img src = "assets/certified-fresh.png" width = "25" height = "25">${rating.Value}`
+          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/certified-fresh.png" width = "35" height = "35"></a>${rating.Value}`
           : parseFloat(rating.Value) >= 60
-          ? `<img src = "assets/fresh.png" width = "25" height = "25">${rating.Value}`
-          : `<img src = "assets/rotten.png" width = "25" height = "25">${rating.Value}`;
+          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/fresh.png" width = "35" height = "35"></a>${rating.Value}`
+          : `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/rotten.png" width = "35" height = "35"></a>${rating.Value}`;
       }
       if (rating.Source === 'Metacritic') {
-        return rating.Value >= 60
-          ? `<div style = "background-color: #66CC33; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`
-          : rating.Value >= 40
-          ? `<div style = "background-color: #D9B42C; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`
-          : `<div style = "background-color: #931818; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`;
+        return parseFloat(rating.Value) >= 60
+          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #54ac28ff;">${rating.Value.slice(
+              0,
+              rating.Value.indexOf('/')
+            )}</div></a>`
+          : parseFloat(rating.Value) >= 40
+          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #D9B42C;">${rating.Value.slice(
+              0,
+              rating.Value.indexOf('/')
+            )}</div></a>`
+          : `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #e50e0eff;">${rating.Value.slice(
+              0,
+              rating.Value.indexOf('/')
+            )}</div></a>`;
       }
     })
     .join('');
@@ -183,7 +221,7 @@ async function displayInitialMovies() {
 
   for (const title of randomTitles) {
     const response = await fetch(
-      `https://www.omdbapi.com/?apikey=23df0941&t=${title}`
+      `https://www.omdbapi.com/?apikey=605455b9&t=${title}`
     );
     const movie = await response.json();
 

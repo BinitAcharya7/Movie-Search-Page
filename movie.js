@@ -7,7 +7,7 @@ async function getMovies(title) {
 
 
 async function renderMovies() {
-    document.querySelector('.movies-list').innerHTML = `<div class="movie-card movie-card-detailed">
+    document.querySelector('.movies-list').innerHTML = `<div class="movie-card">
         <img src = ${""} alt = "Movie Poster of the movie ${}"/>
         <div class="title">
             <span class = "bold-text">Title:</span>${title} 
