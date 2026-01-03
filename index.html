@@ -18,12 +18,33 @@
         <h1>Search Movies</h1>
     </div>
     <div class="search-area">
-            <input type="search" class = "search-bar" name = "q" placeholder = "Search any Movie">
-            <div class="search-icon">
+            <input type="search" class = "search-bar" name = "q" placeholder = "Search any Movie" onkeydown="if (event.key == 'Enter')searchedTitle()">
+            <div class="search-icon" onclick = "searchedTitle()">
             <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
  </header>
-    <script href = "script.js"></script>
+
+<div class="sort">
+    <select id = "sort">
+        <option value = "" disabled selected>Sort</option>
+        <option value = "RATING">IMDb Rating</option>
+        <option value = "LOW_TO_HIGH">Runtime (Low to High)</option>
+        <option value = "HIGH_TO_LOW">Runtime (High to Low)</option>
+    </select>
+</div>
+<div class="filter">
+    <div class="filter-slider">
+        <input type = "range" id = "">
+    </div>
+</div>
+<div class="featured-movies">
+        <h1>Featured Movies</h1>
+    </div>
+<div class="movies-list">
+    <!--Injecting all JS rendered content here-->
+</div>
+
+    <script src="movies.js"></script>
 </body>
 </html>
