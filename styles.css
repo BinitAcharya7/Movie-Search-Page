@@ -106,11 +106,13 @@ header {
     cursor: pointer;
     align-items:flex-start;
     box-shadow: 0 5px 10px #b900ff;
+    position: relative;
 }
 
 .movie-card:hover{
     width: 335px;
     box-shadow: 0 5px 10px #ff006e, 0 15px 40px #ff2a6d; /* BOX shadow trick. use two box shadows instead of one for drop shadows!!!###*/
+    transition: all 0.3s;
 }
 
 .bold-text {
@@ -139,6 +141,10 @@ header {
     width: 100%; */
     font-size: 16px;
     font-weight: 600;
+    position: absolute;
+    bottom: 0;
+    left: 55px;
+    margin-bottom: 10px;
 }
 
 .meta {
@@ -154,6 +160,15 @@ header {
 a {
     text-decoration: none;
 }
+
+.ratings *:hover {
+    box-shadow: 0 5px 10px #00fff9, 0 15px 40px #00fff9;
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s;
+}
+
+
 
 
 /* .movie {

@@ -17,6 +17,10 @@ function searchedTitle() {
   // search ###
 }
 
+function sortMovies(event) {
+  renderMovies(null, event.target.value); // same logikkk. if we dont call it with null this will event.target.value will basically become title lolmao###
+}
+
 async function getMovies(title) {
   const response = await fetch(
     `http://www.omdbapi.com/?s=${title}&apikey=605455b9`
@@ -57,19 +61,29 @@ async function getFullDetails(searchResults) {
   );
 }
 
-async function renderMovies(title) {
+async function renderMovies(title, sorting) {
   // If title is passed (search), fetch new movies.
   //  otherwise use existing movies array. CORE LOGIC###
-  if (title) {
+  if (title && !sorting) {
     await getMovies(title);
   }
+
   /* think aboutescaping awaits for filter and
-   sort ### */
+   sort ### COME BACK TO THIS */
 
   /* A temporary variable for the express purpose of displaying movies (like we did in library project) and its scope is only within this function as its only for displaying movies ofc */
   let displayMovies = movies.map((movie) => ({ ...movie }));
 
   // sort
+  if (sorting === 'RATING') {
+    displayMovies.sort(
+      (a, b) => parseFloat(b.imdbRating) - parseFloat(a.imdbRating)
+    );
+  } else if (sorting === 'HIGH_TO_LOW') {
+    displayMovies.sort((a, b) => parseInt(b.Runtime) - parseInt(a.Runtime));
+  } else if (sorting === 'LOW_TO_HIGH') {
+    displayMovies.sort((a, b) => parseInt(a.Runtime) - parseInt(b.Runtime));
+  }
 
   // filter (since we do this after sort)
 
@@ -109,47 +123,50 @@ async function renderMovies(title) {
 }
 
 function displayAllRatings(movie) {
-  ratings = movie.Ratings;
-  imdbID = movie.imdbID;
+  const ratings = movie.Ratings;
+  const imdbID = movie.imdbID;
 
-  changedTitleTomato = movie.Title.replaceAll(' ', '_')
+  const changedTitleTomato = movie.Title.replaceAll(' ', '_')
     .replaceAll(',', '')
     .replaceAll(':', '')
-    .replaceAll('-', '_');
-  changedTitleMeta = movie.Title.replaceAll(' ', '-')
-    .replaceAll(',', '')
-    .replaceAll(':', '')
+    .replaceAll('-', '_')
+    .replaceAll("'", '')
     .toLowerCase();
-  slicedType = movie.Type.slice(0, 1);
-  metaType = movie.Type === 'movie' ? 'movie' : 'tv';
+  const changedTitleMeta = movie.Title.replaceAll(' ', '-')
+    .replaceAll(',', '')
+    .replaceAll(':', '')
+    .replaceAll("'", '')
+    .toLowerCase();
+  const slicedType = movie.Type.slice(0, 1);
+  const metaType = movie.Type === 'movie' ? 'movie' : 'tv';
 
   return ratings
     .map((rating) => {
       if (rating.Source === 'Internet Movie Database') {
-        return `<a href = "https://www.imdb.com/title/${imdbID}/"><img src = "assets/imdb.webp" width = "35" height = "35"></a>${rating.Value.slice(
+        return `<a href = "https://www.imdb.com/title/${imdbID}/" target = "_blank"><img src = "assets/imdb.webp" width = "35" height = "35"></a>${rating.Value.slice(
           0,
           rating.Value.indexOf('/')
         )}`;
       }
       if (rating.Source === 'Rotten Tomatoes') {
         return parseFloat(rating.Value) >= 75
-          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/certified-fresh.png" width = "35" height = "35"></a>${rating.Value}`
+          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/certified-fresh.png" width = "35" height = "35"></a>${rating.Value}`
           : parseFloat(rating.Value) >= 60
-          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/fresh.png" width = "35" height = "35"></a>${rating.Value}`
-          : `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}"><img src = "assets/rotten.png" width = "35" height = "35"></a>${rating.Value}`;
+          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/fresh.png" width = "35" height = "35"></a>${rating.Value}`
+          : `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/rotten.png" width = "35" height = "35"></a>${rating.Value}`;
       }
       if (rating.Source === 'Metacritic') {
         return parseFloat(rating.Value) >= 60
-          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #54ac28ff;">${rating.Value.slice(
+          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #54ac28ff;">${rating.Value.slice(
               0,
               rating.Value.indexOf('/')
             )}</div></a>`
           : parseFloat(rating.Value) >= 40
-          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #D9B42C;">${rating.Value.slice(
+          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #D9B42C;">${rating.Value.slice(
               0,
               rating.Value.indexOf('/')
             )}</div></a>`
-          : `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}"><div class = "meta" style = "background-color: #e50e0eff;">${rating.Value.slice(
+          : `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #e50e0eff;">${rating.Value.slice(
               0,
               rating.Value.indexOf('/')
             )}</div></a>`;
