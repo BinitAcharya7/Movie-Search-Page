@@ -80,29 +80,54 @@ header {
 
 }
 
-img {
+.movie-card > img {
     width: 100%;
     height: 180px;
     border-radius: 12px 12px 0px 0px;
+    
 }
 
 .movie-card {
     display: flex;
     flex-direction: column;
-    background-color: #fb5607;
+    background-color: #3E5B99;
+    font-family: Montserrat, 'sans-serif';
     color:#f0f0f0;
     border-radius: 12px;
-    width: 250px;
-    height: 350px;
+    width: 300px;
+    height: 475px;
     gap: 25px;
     cursor: pointer;
     align-items:flex-start;
+    box-shadow: 0 5px 10px #b900ff;
+}
 
+.movie-card:hover{
+    width: 325px;
+    box-shadow: 0 5px 10px #ff006e, 0 15px 40px #ff2a6d; /* BOX shadow trick. use two box shadows instead of one for drop shadows!!!###*/
 }
 
 .bold-text {
     font-weight: 500;
     color:#00fff9;
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px;
+    gap: 20px;
+}
+
+.movie-details:last-child {
+    gap: 25px;
+}
+
+.ratings {
+    display: flex;
+    gap: 10px;
+    /* height: 50px;
+    width: 100%; */
 }
 
 /* .movie {

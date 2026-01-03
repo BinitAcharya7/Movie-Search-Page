@@ -33,13 +33,16 @@ async function getMovies(title) {
   await getFullDetails(searchResults);
 }
 
-async function getFullDetails(searchResults){
-    await Promise.all(searchResults.map(async(searchResult) => {
-    const data = await fetch(`http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`);
-    movies = await data.json();
-    return movies;
-    }
-    ));
+async function getFullDetails(searchResults) {
+  await Promise.all(
+    searchResults.map(async (searchResult) => {
+      const data = await fetch(
+        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+      );
+      movies = await data.json();
+      return movies;
+    })
+  );
 }
 
 async function renderMovies(title) {
@@ -64,41 +67,57 @@ async function renderMovies(title) {
 
   document.querySelector('.movies-list').innerHTML = displayMovies
     .map(
-      (movie) => `<div class="movie-card movie-card-basic">
-        <img src = ${movie.Poster} alt = "Movie Poster of the movie ${movie.Title}"/>
-        <div class="title">
-            <span class = "bold-text">Title:</span>${movie.Title} 
-        </div>
-        <div class="genre">
-            <span class = "bold-text">Genre:</span>${movie.Genre} 
-        </div>
-        <div class="runtime">
-            <span class = "bold-text">Genre:</span>${movie.Runtime} 
-        </div>
-        <div class="year">
-            <span class = "bold-text">Year:</span>${movie.Year} 
-        </div>
-        <div class="type">
-            <span class = "bold-text">Type:</span>${movie.Type} 
-        </div>
-        <div class="ratings">
-        ${displayAllRatings(movie.Ratings)}
+      (movie) => `<div class="movie-card">
+        <img src = ${movie.Poster} alt = "Movie Poster of the movie ${
+        movie.Title
+      }"/>
+        <div class = "movie-details">
+          <div class="title">
+              <span class = "bold-text">Title:</span> ${movie.Title} 
+          </div>
+          <div class="genre">
+              <span class = "bold-text">Genre:</span> ${movie.Genre} 
+          </div>
+          <div class="runtime">
+              <span class = "bold-text">Runtime:</span> ${movie.Runtime} 
+          </div>
+          <div class="year">
+              <span class = "bold-text">Year:</span> ${movie.Year} 
+          </div>
+          <div class="type">
+              <span class = "bold-text">Type:</span> ${movie.Type} 
+          </div>
+          <div class="ratings">
+          ${displayAllRatings(movie.Ratings)}
+          </div>
         </div>
     </div>`
     )
     .join('');
 }
 
-function displayAllRatings(ratings){
-    ratings.map((rating) => {
-        if (rating.Source === "Internet Movie Database"){
-            imdbRating = rating.Source;
-        }
-        if (rating.Source === "Rotten Tomatoes"){
-            rottenRating = parseFloat(rating.Value) > 60 ? "":"" 
-        }
-    }
-    )
+function displayAllRatings(ratings) {
+  return ratings
+    .map((rating) => {
+      if (rating.Source === 'Internet Movie Database') {
+        return `<img src = "assets/imdb.webp" width = "25" height = "25">${rating.Value}`;
+      }
+      if (rating.Source === 'Rotten Tomatoes') {
+        return parseFloat(rating.Value) >= 75
+          ? `<img src = "assets/certified-fresh.png" width = "25" height = "25">${rating.Value}`
+          : parseFloat(rating.Value) >= 60
+          ? `<img src = "assets/fresh.png" width = "25" height = "25">${rating.Value}`
+          : `<img src = "assets/rotten.png" width = "25" height = "25">${rating.Value}`;
+      }
+      if (rating.Source === 'Metacritic') {
+        return rating.Value >= 60
+          ? `<div style = "background-color: #66CC33; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`
+          : rating.Value >= 40
+          ? `<div style = "background-color: #D9B42C; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`
+          : `<div style = "background-color: #931818; width: 25px; height: auto; border-radius: 5px">${rating.Value}</div>`;
+      }
+    })
+    .join('');
 }
 
 // Displays on initial load
@@ -142,6 +161,7 @@ const popularMovies = [
   'Goodfellas',
   'The Godfather',
   'Parasite',
+  'Bhaag Milka Bhaag',
   'Dune',
   'Blade Runner',
   'The Room',
@@ -177,6 +197,3 @@ async function displayInitialMovies() {
 }
 
 displayInitialMovies();
-
-
-
