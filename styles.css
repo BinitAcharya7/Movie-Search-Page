@@ -14,6 +14,10 @@
     box-sizing: border-box;
 }
 
+
+.featured-movies {
+    margin: 20px auto;
+}
 body {
     font-family: 'Orbitron', sans-serif;
     display: flex;
@@ -37,9 +41,9 @@ header {
     color:var(--white);
     background-image: url('assets/bg.jpg');
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: left center;
     background-size: cover;
-    height: 250px;
+    height: 400px;
     width: 100%;
 }
 
@@ -107,12 +111,13 @@ header {
     align-items:flex-start;
     box-shadow: 0 5px 10px #b900ff;
     position: relative;
+    transition: all 0.3s; /* transition on parent and not pseudo class because if its only in pseudo class its only going to work on hover and not when you stop hovering*/
 }
 
 .movie-card:hover{
     width: 335px;
     box-shadow: 0 5px 10px #ff006e, 0 15px 40px #ff2a6d; /* BOX shadow trick. use two box shadows instead of one for drop shadows!!!###*/
-    transition: all 0.3s;
+    
 }
 
 .bold-text {
@@ -161,12 +166,125 @@ a {
     text-decoration: none;
 }
 
+.ratings * {
+    transition: all 0.3s;
+}
+
 .ratings *:hover {
     box-shadow: 0 5px 10px #00fff9, 0 15px 40px #00fff9;
     width: 40px;
     height: 40px;
-    transition: all 0.3s;
 }
+
+
+.slider-and-sort {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.filter-slider {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: 'Montserrat', 'sans-serif';
+    /* min-width: 400px; */
+}
+
+/*Custom styles for the slider*/
+
+.slider {
+    -webkit-appearance: none;
+    appearance: auto;
+    min-width: 48%;
+    height: 5px; 
+    outline: none;
+    
+}
+
+
+.slider::-webkit-slider-runnable-track {
+    background: #2c406c;
+    border-radius: 5px;
+}
+
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #3E5B99;
+    cursor: pointer;
+    border-radius: 25%;
+    border: solid 1px #00fff9;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 5px 10px #00fff9, 0 15px 40px #00fff9;
+}
+
+
+.slider::-moz-range-track {
+    background: #2c406c;
+    border-radius: 5px;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #3E5B99;
+    cursor: pointer;
+    border-radius: 25%;
+    border: solid 1px #00fff9;
+    transition: all 3ms;
+}
+
+.slider::-moz-range-thumb:hover {
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 5px 10px #00fff9, 0 15px 40px #00fff9;
+}
+
+
+/*Custom sort box styles*/
+
+#sort {
+    padding: 8px 12px;
+    background-color: #2c406c;  /* Your color */
+    color: var(--white);
+    border: 2px solid var(--other-purple);
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+
+#sort:hover {
+    border-color: var(--pink);
+}
+
+#sort:focus {
+    border-color: var(--cyan);
+}
+
+#sort option {
+    background-color: #2c406c;
+    color: var(--white);
+}
+
+
+
+
+
+
 
 
 

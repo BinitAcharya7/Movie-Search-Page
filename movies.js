@@ -1,8 +1,8 @@
-// http://www.omdbapi.com/?s=thor&apikey=605455b9
+// http://www.omdbapi.com/?s=thor&apikey=8e078aa4
 
 //&page=1
 
-// http://www.omdbapi.com/?apikey=605455b9&i=tt3896198
+// http://www.omdbapi.com/?apikey=8e078aa4&i=tt3896198
 
 let movies = [];
 
@@ -12,6 +12,7 @@ function searchedTitle() {
     alert('Please enter a title');
     return;
   }
+  document.querySelector('.featured-movies').innerHTML = `<h1>Results</h1>`;
   renderMovies(title); // call with argument
   // so that we can use getMovies() on
   // search ###
@@ -21,9 +22,13 @@ function sortMovies(event) {
   renderMovies(null, event.target.value); // same logikkk. if we dont call it with null this will event.target.value will basically become title lolmao###
 }
 
+function filterByYear(event) {
+  renderMovies(null, null, event.target.value);
+}
+
 async function getMovies(title) {
   const response = await fetch(
-    `http://www.omdbapi.com/?s=${title}&apikey=605455b9`
+    `http://www.omdbapi.com/?s=${title}&apikey=8e078aa4`
   );
   const data = await response.json();
   let searchResults = data.Search || []; /* Search is the array
@@ -41,7 +46,7 @@ async function getMovies(title) {
 //   return Promise.all(
 //     searchResults.map(async (searchResult) => {
 //       const data = await fetch(
-//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=605455b9`
+//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=8e078aa4`
 //       );
 //       movies = await data.json();
 //       return movies;
@@ -53,7 +58,7 @@ async function getFullDetails(searchResults) {
   movies = await Promise.all(
     searchResults.map(async (searchResult) => {
       const data = await fetch(
-        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=605455b9`
+        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=8e078aa4`
       );
       const movie = await data.json();
       return movie; /* movie is in scope of this map function and won't overwrite itself everytime we map. on each map we essentially get a different movie ### also all the maps happen CONCURRENTLY###*/
@@ -61,11 +66,13 @@ async function getFullDetails(searchResults) {
   );
 }
 
-async function renderMovies(title, sorting) {
+async function renderMovies(title, sorting, filterYear) {
   // If title is passed (search), fetch new movies.
   //  otherwise use existing movies array. CORE LOGIC###
   if (title && !sorting) {
-    await getMovies(title);
+    await getMovies(
+      title
+    ); /* movies array for the searched title comes right here ### */
   }
 
   /* think aboutescaping awaits for filter and
@@ -87,9 +94,14 @@ async function renderMovies(title, sorting) {
 
   // filter (since we do this after sort)
 
-  // change rating to stars (in displayMovies variable)
+  if (filterYear) {
+    displayMovies = displayMovies.filter(
+      (movie) => parseInt(movie.Year) <= parseInt(filterYear)
+    );
+    document.getElementById('slider-value').innerHTML = `${filterYear}`;
+  }
 
-  // actually render the books. 1st mount random books template stringed then by search
+  // actually render the books. 1st mount random books template stringed... now by actual search
 
   document.querySelector('.movies-list').innerHTML = displayMovies
     .map(
@@ -177,7 +189,7 @@ function displayAllRatings(movie) {
 
 // Displays on initial load
 
-const popularMovies = [
+const initialMovies = [
   'The Big Lebowski',
   'The Matrix',
   "The Pervert's Guide to Ideology",
@@ -229,7 +241,7 @@ const popularMovies = [
 ];
 
 function getRandomMovies() {
-  const shuffled = [...popularMovies].sort(() => 0.5 - Math.random());
+  const shuffled = [...initialMovies].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, 15);
 }
 
@@ -238,7 +250,7 @@ async function displayInitialMovies() {
 
   for (const title of randomTitles) {
     const response = await fetch(
-      `https://www.omdbapi.com/?apikey=605455b9&t=${title}`
+      `https://www.omdbapi.com/?apikey=8e078aa4&t=${title}`
     );
     const movie = await response.json();
 

@@ -26,17 +26,20 @@
         </div>
  </header>
 
-<div class="sort" onchange="sortMovies(event)">
-    <select id = "sort">
-        <option value = "" disabled selected>Sort</option>
-        <option value = "RATING">IMDb Rating</option>
-        <option value = "LOW_TO_HIGH">Runtime (Low to High)</option>
-        <option value = "HIGH_TO_LOW">Runtime (High to Low)</option>
-    </select>
-</div>
-<div class="filter">
-    <div class="filter-slider">
-        <input type = "range" id = "">
+<div class="slider-and-sort">
+    <div class="filter">
+        <div class="filter-slider"> <label for = "year-range" id = "filter-label">Year Range: </label>
+            <input type = "range" id = "year-range" class = "slider" min = "1930" max = "2020"  oninput = "filterByYear(event)">
+            <span id="slider-value">2020</span>
+        </div>
+    </div>
+    <div class="sort" onchange="sortMovies(event)">
+        <select id = "sort">
+            <option value = "" disabled selected>Sort</option>
+            <option value = "RATING">IMDb Rating</option>
+            <option value = "LOW_TO_HIGH">Runtime (Low to High)</option>
+            <option value = "HIGH_TO_LOW">Runtime (High to Low)</option>
+        </select>
     </div>
 </div>
 <div class="featured-movies">
