@@ -82,13 +82,14 @@ header {
     cursor: pointer;
 }
 
-.movies-list {
+#movies-list {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-evenly;
-
+    width: 100%;
 }
+
 
 .movie-card > img {
     width: 100%;
@@ -302,6 +303,10 @@ a {
     border-radius: 8px;
     
 }
+
+.movie-detailed-image:hover {
+    box-shadow: 0 5px 10px #f0f0f0, 0 15px 40px #fb5607;
+}
   
 .ratings-detailed {
     text-align: center;
@@ -323,3 +328,37 @@ a {
     font-family: Orbitron, Montserrat, 'sans-serif';
 }
 
+.movies-loading { /* no need to make it invisible because it doesnt even exist before its visible.*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  font-size: 60px;
+  color: #00fff9;
+} 
+
+.movies-loading-spinner {
+  display: none !important; /* css fonts website's display inline block caused it to still show as a small icon on the side*/
+}
+
+.movies-area.movies-loading .movies-loading-spinner {
+  display: block !important; /*now since the display none has higher priority because of its important we add another important here so it actually shows*/
+}
+
+/*###so ONLY if movies-loading class exists, we show the spinner*/
+
+.fa-spinner {
+  animation: rotate 600ms infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*movies-loading is the main man here its the ultimate style and the ultimate style giver as until await comes back with the result there's nothing in the movies area anyway### and until the spinner is paired with it, the spinner has display none*/

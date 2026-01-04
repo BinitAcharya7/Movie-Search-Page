@@ -1,8 +1,8 @@
-// http://www.omdbapi.com/?s=thor&apikey=23df0941
+// http://www.omdbapi.com/?s=thor&apikey=fda29c77
 
 //&page=1
 
-// http://www.omdbapi.com/?apikey=23df0941&i=tt3896198
+// http://www.omdbapi.com/?apikey=fda29c77&i=tt3896198
 
 let movies = [];
 
@@ -28,7 +28,7 @@ function filterByYear(event) {
 
 async function getMovies(title) {
   const response = await fetch(
-    `http://www.omdbapi.com/?s=${title}&apikey=23df0941`
+    `http://www.omdbapi.com/?s=${title}&apikey=fda29c77`
   );
   const data = await response.json();
   let searchResults = data.Search || []; /* Search is the array
@@ -46,7 +46,7 @@ async function getMovies(title) {
 //   return Promise.all(
 //     searchResults.map(async (searchResult) => {
 //       const data = await fetch(
-//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=fda29c77`
 //       );
 //       movies = await data.json();
 //       return movies;
@@ -58,7 +58,7 @@ async function getFullDetails(searchResults) {
   movies = await Promise.all(
     searchResults.map(async (searchResult) => {
       const data = await fetch(
-        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=fda29c77`
       );
       const movie = await data.json();
       return movie; /* movie is in scope of this map function and won't overwrite itself everytime we map. on each map we essentially get a different movie ### also all the maps happen CONCURRENTLY###*/
@@ -69,11 +69,17 @@ async function getFullDetails(searchResults) {
 async function renderMovies(title, sorting, filterYear) {
   // If title is passed (search), fetch new movies.
   //  otherwise use existing movies array. CORE LOGIC###
+
+  const moviesArea = document.querySelector('.movies-area');
+  document.getElementById('movies-list').innerHTML = ''; // Clear existing movies first so they dont kick out the spinner
+  moviesArea.classList.add('movies-loading');
   if (title && !sorting) {
     await getMovies(
       title
     ); /* movies array for the searched title comes right here ### */
   }
+
+  moviesArea.classList.remove('movies-loading');
 
   /* think aboutescaping awaits for filter and
    sort ### COME BACK TO THIS */
@@ -103,7 +109,7 @@ async function renderMovies(title, sorting, filterYear) {
 
   // actually render the books. 1st mount random books template stringed... now by actual search
   /* ### on line 108 without the quotes around ${movie.imdbID} it doesnt work even if the id passes as ids are stores as strings. also notice ### movieOpener function itself isn't template stringed only the argument is because its not like displayAllRatings() which runs immediately and returns the result that we are supposed to innerHTML, this one is ONLY interpolating that id for the JS so that when we click on the html element, THEN it actually executes with this interpolated id. so inside attributes like onclick just put the function as a string itself and only interpolate the arguments.*/
-  document.querySelector('.movies-list').innerHTML = displayMovies
+  document.getElementById('movies-list').innerHTML = displayMovies
     .map(
       (movie) => `<div class="movie-card" onclick = "movieOpener('${
         movie.imdbID
@@ -252,7 +258,7 @@ async function displayInitialMovies() {
 
   for (const title of randomTitles) {
     const response = await fetch(
-      `https://www.omdbapi.com/?apikey=23df0941&t=${title}`
+      `https://www.omdbapi.com/?apikey=fda29c77&t=${title}`
     );
     const movie = await response.json();
 

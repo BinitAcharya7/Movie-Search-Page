@@ -19,7 +19,7 @@
         <h1>Search Movies</h1>
     </div>
     <div class="search-area">
-            <input type="search" class = "search-bar" name = "q" placeholder = "Search any Movie" onkeydown="if (event.key == 'Enter')searchedTitle()">
+            <input type="search" autofocus class = "search-bar" name = "q" placeholder = "Search any Movie" onkeydown="if (event.key == 'Enter')searchedTitle()">
             <div class="search-icon" onclick = "searchedTitle()">
             <i class="fa-solid fa-magnifying-glass"></i>
             </div>
@@ -45,8 +45,12 @@
 <div class="featured-movies">
         <h1>Featured Movies</h1>
     </div>
-<div class="movies-list">
-    <!--Injecting all JS rendered content here-->
+
+<div class="movies-area"> <!--for the spinner as we can't add it to the place where innerhtml changes unless we add the icon in the actual changed place too### so the fa-spinner wont even exist if we directly add it to the innerhtml changing class-->
+    <div id = "movies-list"><!--Injecting all JS rendered content here--></div>
+    
+    <!--in the loading state movies-loading class will be added here which will show the spinner before await comes back with the result.-->
+     <i class="fas fa-spinner movies-loading-spinner"></i><!--movies-loading-spinner has display none until movies-loading class is addded so then the actual spinner finally shows which we've styled with the class that adds itself beforehand so just do display:block--> 
 </div>
 
     <script src="movies.js"></script>
