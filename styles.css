@@ -121,7 +121,7 @@ header {
 }
 
 .bold-text {
-    font-weight: 500;
+    font-weight: 600;
     color: #00fff9;
 }
 
@@ -280,23 +280,46 @@ a {
     color: var(--white);
 }
 
-
-
-
-
-
-
-
-
-
-/* .movie {
- 
+#movie-information {
+    font-family: Montserrat, 'sans-serif';
 }
 
-.movie-basic {
-
+.movie-figure {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    /* padding: 100px; */
+    /* left: 25%; */
+    margin-bottom: 50px;
+    
 }
 
-.movie-detailed {
+.movie-detailed-image {
+    margin-top: 5%;
+    width: 50%;
+    aspect-ratio: 16/9;
+    object-position: center;
+    border-radius: 8px;
+    
+}
+  
+.ratings-detailed {
+    text-align: center;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%); /*###THE CENTERING TRICK*/
+   
+}
 
-} */
+.plot-expander {
+    padding: 2px 4px;
+    background-color: #ff006e;
+    border-radius: 6px;
+    border: none;
+    color: #f0f0f0;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: Orbitron, Montserrat, 'sans-serif';
+}
+

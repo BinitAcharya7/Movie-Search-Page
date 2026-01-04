@@ -1,8 +1,8 @@
-// http://www.omdbapi.com/?s=thor&apikey=8e078aa4
+// http://www.omdbapi.com/?s=thor&apikey=23df0941
 
 //&page=1
 
-// http://www.omdbapi.com/?apikey=8e078aa4&i=tt3896198
+// http://www.omdbapi.com/?apikey=23df0941&i=tt3896198
 
 let movies = [];
 
@@ -28,7 +28,7 @@ function filterByYear(event) {
 
 async function getMovies(title) {
   const response = await fetch(
-    `http://www.omdbapi.com/?s=${title}&apikey=8e078aa4`
+    `http://www.omdbapi.com/?s=${title}&apikey=23df0941`
   );
   const data = await response.json();
   let searchResults = data.Search || []; /* Search is the array
@@ -46,7 +46,7 @@ async function getMovies(title) {
 //   return Promise.all(
 //     searchResults.map(async (searchResult) => {
 //       const data = await fetch(
-//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=8e078aa4`
+//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
 //       );
 //       movies = await data.json();
 //       return movies;
@@ -58,7 +58,7 @@ async function getFullDetails(searchResults) {
   movies = await Promise.all(
     searchResults.map(async (searchResult) => {
       const data = await fetch(
-        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=8e078aa4`
+        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
       );
       const movie = await data.json();
       return movie; /* movie is in scope of this map function and won't overwrite itself everytime we map. on each map we essentially get a different movie ### also all the maps happen CONCURRENTLY###*/
@@ -102,16 +102,21 @@ async function renderMovies(title, sorting, filterYear) {
   }
 
   // actually render the books. 1st mount random books template stringed... now by actual search
-
+  /* ### on line 108 without the quotes around ${movie.imdbID} it doesnt work even if the id passes as ids are stores as strings. also notice ### movieOpener function itself isn't template stringed only the argument is because its not like displayAllRatings() which runs immediately and returns the result that we are supposed to innerHTML, this one is ONLY interpolating that id for the JS so that when we click on the html element, THEN it actually executes with this interpolated id. so inside attributes like onclick just put the function as a string itself and only interpolate the arguments.*/
   document.querySelector('.movies-list').innerHTML = displayMovies
     .map(
-      (movie) => `<div class="movie-card">
+      (movie) => `<div class="movie-card" onclick = "movieOpener('${
+        movie.imdbID
+      }')">
         <img src = ${movie.Poster} alt = "Movie Poster of the movie ${
         movie.Title
       }"/>
         <div class = "movie-details">
           <div class="title">
               <span class = "bold-text">Title:</span> ${movie.Title} 
+          </div>
+          <div class="type">
+              <span class = "bold-text">Type:</span> ${movie.Type} 
           </div>
           <div class="genre">
               <span class = "bold-text">Genre:</span> ${movie.Genre} 
@@ -121,9 +126,6 @@ async function renderMovies(title, sorting, filterYear) {
           </div>
           <div class="year">
               <span class = "bold-text">Year:</span> ${movie.Year} 
-          </div>
-          <div class="type">
-              <span class = "bold-text">Type:</span> ${movie.Type} 
           </div>
           <div class="ratings">
           ${displayAllRatings(movie)}
@@ -250,7 +252,7 @@ async function displayInitialMovies() {
 
   for (const title of randomTitles) {
     const response = await fetch(
-      `https://www.omdbapi.com/?apikey=8e078aa4&t=${title}`
+      `https://www.omdbapi.com/?apikey=23df0941&t=${title}`
     );
     const movie = await response.json();
 
@@ -264,3 +266,22 @@ async function displayInitialMovies() {
 }
 
 displayInitialMovies();
+
+function movieOpener(imdbID) {
+  // store locally so we don't fetch again since we already have all the details
+
+  // find the movie with its passed ID
+
+  const movie = movies.find((movie) => movie.imdbID === imdbID);
+
+  //now store it in local storage
+
+  localStorage.setItem(
+    'movie',
+    JSON.stringify(movie)
+  ); /* local storage only stores strings so if we just pass movie its an object and it just won't work */
+
+  // open with the ID instead of normally opening window.loc.href or window.open movie.html. so we can have shareable urls and bookmarks
+
+  window.location.href = `movie.html?id=${imdbID}`;
+}
