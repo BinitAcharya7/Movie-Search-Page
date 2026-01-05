@@ -17,7 +17,7 @@ async function getMovie() {
 
   if (!movie || movie.imdbID !== imdbID) {
     const data = await fetch(
-      `http://www.omdbapi.com/?apikey=23df0941&i=${imdbID}`
+      `https://www.omdbapi.com/?apikey=23df0941&i=${imdbID}`
     );
     movie = await data.json();
     return movie;
@@ -163,7 +163,7 @@ function displayAllRatings(movie) {
 async function plotExpander(id) {
   let movie;
   const data = await fetch(
-    `http://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=full`
+    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=full`
   );
   movie = await data.json();
   document.getElementById(
@@ -174,7 +174,7 @@ async function plotExpander(id) {
 async function plotLesspander(id) {
   let movie;
   const data = await fetch(
-    `http://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=short`
+    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=short`
   );
 
   movie = await data.json();

@@ -28,7 +28,7 @@ function filterByYear(event) {
 
 async function getMovies(title) {
   const response = await fetch(
-    `http://www.omdbapi.com/?s=${title}&apikey=23df0941`
+    `https://www.omdbapi.com/?s=${title}&apikey=23df0941`
   );
   const data = await response.json();
   let searchResults = data.Search || []; /* Search is the array
@@ -46,7 +46,7 @@ async function getMovies(title) {
 //   return Promise.all(
 //     searchResults.map(async (searchResult) => {
 //       const data = await fetch(
-//         `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+//         `https://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
 //       );
 //       movies = await data.json();
 //       return movies;
@@ -58,7 +58,7 @@ async function getFullDetails(searchResults) {
   movies = await Promise.all(
     searchResults.map(async (searchResult) => {
       const data = await fetch(
-        `http://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
+        `https://www.omdbapi.com/?i=${searchResult.imdbID}&apikey=23df0941`
       );
       const movie = await data.json();
       return movie; /* movie is in scope of this map function and won't overwrite itself everytime we map. on each map we essentially get a different movie ### also all the maps happen CONCURRENTLY###*/
