@@ -42,8 +42,8 @@ async function renderMovie() {
   tmdbData = await getTmdbID(movie.imdbID);
   const iframeURL =
     tmdbData.type === 'movie'
-      ? `https://www.vidking.net/embed/movie/${tmdbData.tmdbID}?color=ff2a6d`
-      : `https://www.vidking.net/embed/tv/${tmdbData.tmdbID}/1/1?color=fb5607`;
+      ? `https://www.vidking.net/embed/movie/${tmdbData.tmdbID}?color=ff2a6d&autoPlay=true`
+      : `https://www.vidking.net/embed/tv/${tmdbData.tmdbID}/1/1?color=fb5607&autoPlay=true&nextEpisode=true&episodeSelector=true`;
   document.getElementById('movie-information').innerHTML = `
         <iframe src="${iframeURL}" width="100%" height="600" frameborder="0" allowfullscreen> </iframe>
         <figure class = "movie-figure">
