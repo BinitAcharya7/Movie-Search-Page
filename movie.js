@@ -1,3 +1,5 @@
+//https://api.themoviedb.org/3/movie/11?api_key=254c69a49b0450ae64a458e2d6b6b574
+
 // get the url ID that was sent by URL params
 async function getMovie() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -47,7 +49,16 @@ async function renderMovie() {
             ${displayAllRatings(movie)}
           </div>
         </figure>
-        <div class = "movie-details">
+        <div class = "movie-details movie-single">
+        <div class="plot" id = "plot-not-detailed">
+              <span class = "bold-text">Plot:</span> ${
+                movie.Plot
+              } <button class = "plot-expander" onclick = "plotExpander('${
+    movie.imdbID
+  }')"> Know More (Spoilers) 
+  <i class="fas fa-spinner movies-loading-spinner"></i>
+  </button>
+          </div>
           <div class="title">
               <span class = "bold-text">Title:</span> ${movie.Title} 
           </div>
@@ -64,14 +75,7 @@ async function renderMovie() {
               <span class = "bold-text">Writers:</span> ${movie.Writer} 
           </div>
           <div class="actors">
-              <span class = "bold-text">Actors:</span> ${movie.Actor} 
-          </div>
-          <div class="plot" id = "plot-not-detailed">
-              <span class = "bold-text">Plot:</span> ${
-                movie.Plot
-              } <button class = "plot-expander" onclick = "plotExpander('${
-    movie.imdbID
-  }')"> Know More (Spoilers) </button>
+              <span class = "bold-text">Actors:</span> ${movie.Actors} 
           </div>
           <div class="awards">
               <span class = "bold-text">Awards:</span> ${movie.Awards} 
@@ -87,11 +91,12 @@ async function renderMovie() {
           </div>
        
 `;
+  /* change favicon and title with js */
   document.title = movie.Title;
   const favicon =
     document.querySelector(
       "link[rel='icon']"
-    ); /* attribute value wala selector */
+    ); /* attribute value wala selector (select the link whose rel attribute is icon) */
   favicon.href = movie.Poster;
 }
 
@@ -154,10 +159,32 @@ async function plotExpander(id) {
     `http://www.omdbapi.com/?apikey=fda29c77&i=${id}&plot=full`
   );
   movie = await data.json();
+  document.getElementById(
+    'plot-not-detailed'
+  ).innerHTML = `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-lesspander" onclick = "plotLesspander('${movie.imdbID}')"> NOOO I CAN'T HANDLE IT!!! THE BEACON OF TRUTH IS TOO BRIGHT</button>`;
+}
+
+async function plotLesspander(id) {
+  let movie;
+  const data = await fetch(
+    `http://www.omdbapi.com/?apikey=fda29c77&i=${id}&plot=short`
+  );
+
+  movie = await data.json();
 
   document.getElementById(
     'plot-not-detailed'
-  ).innerHTML = `<span class = "bold-text">Plot:</span> ${movie.Plot}`;
+  ).innerHTML = `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-expander" onclick = "plotExpander('${movie.imdbID}')"> Want the red pill again?</button>`;
 }
 
 renderMovie();
+
+async function getTmdbId() {
+  const data = await fetch(
+    'https://api.themoviedb.org/3/find/tt0458290?api_key=254c69a49b0450ae64a458e2d6b6b574&external_source=imdb_id'
+  );
+  let movie_data = data.json();
+  console.log(movie_data.tv_results);
+}
+
+getTmdbId();

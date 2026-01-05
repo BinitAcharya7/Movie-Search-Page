@@ -236,14 +236,12 @@ const initialMovies = [
   'Goodfellas',
   'The Godfather',
   'Parasite',
-  'Bhaag Milka Bhaag',
   'Dune',
   'Blade Runner',
   'The Room',
   'Khichdi: The Movie',
   'The 40-Year-Old Virgin',
   'Pulp Fiction',
-  'Pump Friction',
   'Titanic',
   'Jurassic Park',
 ];
@@ -262,8 +260,12 @@ async function displayInitialMovies() {
     );
     const movie = await response.json();
 
-    /* can't use getMovies() because that uses &S and if we used &s here we'd get like 10 results for 1 title even if the title is the exact match.*/
-    movies.push(movie);
+    /* can't use getMovies() because that uses &S and if we used &s here we'd get like 10 results for 1 title even 
+    if the title is the exact match.*/
+
+    if (movie.Response !== 'False') {
+      movies.push(movie);
+    }
   }
 
   renderMovies(); // call without arguments
