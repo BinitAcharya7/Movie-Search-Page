@@ -200,6 +200,8 @@ async function getTmdbID(imdbID) {
 
   return null;
 } /* nullish coalescing would do the same thing since ids cant be 0. ?? also treats 0 as existing/not false while || would treat an id of 0 (if such a thing existed) as not existing/false/null */
+
+/* vidking api progress rememberer */
 window.addEventListener('message', function (event) {
   // console.log("event: ", event);
   console.log('Message received from the player: ', JSON.parse(event.data)); // Message received from player
