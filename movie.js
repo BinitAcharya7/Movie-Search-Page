@@ -1,6 +1,7 @@
 //https://api.themoviedb.org/3/movie/11?api_key=254c69a49b0450ae64a458e2d6b6b574
 
 // get the url ID that was sent by URL params
+let tmdbData;
 async function getMovie() {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -38,7 +39,13 @@ TL;DR: the unique link will not have the unique movie without that second check 
 
 async function renderMovie() {
   const movie = await getMovie();
+  tmdbData = await getTmdbID(movie.imdbID);
+  const iframeURL =
+    tmdbData.type === 'movie'
+      ? `https://www.vidking.net/embed/movie/${tmdbData.tmdbID}?color=ff2a6d`
+      : `https://www.vidking.net/embed/tv/${tmdbData.tmdbID}/1/1?color=fb5607`;
   document.getElementById('movie-information').innerHTML = `
+        <iframe src="${iframeURL}" width="100%" height="600" frameborder="0" allowfullscreen> </iframe>
         <figure class = "movie-figure">
             <img src="${
               movie.Poster
@@ -179,12 +186,25 @@ async function plotLesspander(id) {
 
 renderMovie();
 
-async function getTmdbId() {
+async function getTmdbID(imdbID) {
   const data = await fetch(
-    'https://api.themoviedb.org/3/find/tt0458290?api_key=254c69a49b0450ae64a458e2d6b6b574&external_source=imdb_id'
+    `https://api.themoviedb.org/3/find/${imdbID}?api_key=254c69a49b0450ae64a458e2d6b6b574&external_source=imdb_id`
   );
-  let movie_data = data.json();
-  console.log(movie_data.tv_results);
-}
+  let response = await data.json();
 
-getTmdbId();
+  if (response.movie_results?.[0]?.id) {
+    return { tmdbID: response.movie_results[0].id, type: 'movie' };
+  } else if (response.tv_results?.[0]?.id) {
+    return { tmdbID: response.tv_results[0].id, type: 'tv' };
+  }
+
+  return null;
+} /* nullish coalescing would do the same thing since ids cant be 0. ?? also treats 0 as existing/not false while || would treat an id of 0 (if such a thing existed) as not existing/false/null */
+window.addEventListener('message', function (event) {
+  // console.log("event: ", event);
+  console.log('Message received from the player: ', JSON.parse(event.data)); // Message received from player
+  if (typeof event.data === 'string') {
+    var messageArea = document.querySelector('#messageArea');
+    messageArea.innerText = event.data;
+  }
+});
