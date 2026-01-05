@@ -51,10 +51,14 @@ header {
 .search-area {
     display: flex;
     justify-content: center;
-    position: relative;
     top: -20px;
+    margin-bottom: 30px;
 }
 
+.search-wrapper {
+    display: inline-block;
+    position: relative;
+}
 .search-bar {
     border-radius: 20px;
     padding: 0px 20px;
@@ -74,7 +78,7 @@ header {
 
 .search-icon {
     position: absolute;
-    right: 35%;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%); /*always used in tandem as top % puts the icon's top edge at 50% from bottom or bottom edge at 50% from top; so translateY pushes it up 50% its own height acheiving true vertical centering*/
     color: var(--cyan);
@@ -266,6 +270,8 @@ a {
     font-size: 14px;
     cursor: pointer;
     outline: none;
+    max-width: 200px;
+    width: 100%;
 }
 
 #sort:hover {

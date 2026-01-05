@@ -9,21 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="assets/favicon.png">
-    <title>Movie Info</title>
+    <title>Cinemate</title>
     <script src="https://kit.fontawesome.com/e247684d80.js" crossorigin="anonymous"></script>
 </head>
 <body>
     
  <header>
     <div class="hero">
-        <h1>Search Movies</h1>
+        <h1>Cinemate</h1>
     </div>
     <div class="search-area">
-            <input type="search" autofocus class = "search-bar" name = "q" placeholder = "Search any Movie" onkeydown="if (event.key == 'Enter')searchedTitle()">
+        <div class="search-wrapper">
+            <input type="search" autofocus class = "search-bar" name = "q" placeholder = "Search any movie or TV show" onkeydown="if (event.key == 'Enter')searchedTitle()">
             <div class="search-icon" onclick = "searchedTitle()">
             <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
+    </div>
  </header>
 
 <div class="slider-and-sort">
