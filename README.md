@@ -19,7 +19,7 @@ A sleek, responsive movie and TV show search application that fetches data from 
   - IMDb Rating (High to Low)
   - Runtime (Low to High)
   - Runtime (High to Low)
-- **Year Filter**: Filter movies and TV shows by year range (1930-2020)
+- **Year Filter**: Filter movies and TV shows by year range (1910-2020)
 - **Featured Content**: Displays 15 random featured movies and TV shows on initial load
 - **Loading Spinner**: Visual feedback during API requests
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
