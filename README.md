@@ -2,6 +2,8 @@
 
 A sleek, responsive movie and TV show search application that fetches data from the OMDB API and TMDB API. Search for any movie or TV show, view detailed information including ratings from IMDb, Rotten Tomatoes, and Metacritic, sort/filter results, and watch content directly in the app.
 
+![](assets/screenshot.png)
+
 ## Features
 
 - **Search Functionality**: Search for any movie or TV show by title
