@@ -104,7 +104,7 @@ async function renderMovies(title, sorting, filterYear) {
     displayMovies = displayMovies.filter(
       (movie) => parseInt(movie.Year) <= parseInt(filterYear)
     );
-    document.getElementById('slider-value').innerHTML = `${filterYear}`;
+    document.getElementById('slider-value').innerHTML = `${filterYear} +`;
   }
 
   // actually render the books. 1st mount random books template stringed... now by actual search
