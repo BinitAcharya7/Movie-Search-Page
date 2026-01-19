@@ -10,14 +10,14 @@ async function getMovie() {
   // (try to) get the movie
 
   let movie = JSON.parse(
-    localStorage.getItem('movie')
+    localStorage.getItem('movie'),
   ); /* now actually turn that stored(stringified) object to actual object with properties ;-) */
 
   // fetch it if the id wasn't passed or if a shared link was opened or we just dont have the movie. whatever just a fallback.
 
   if (!movie || movie.imdbID !== imdbID) {
     const data = await fetch(
-      `https://www.omdbapi.com/?apikey=23df0941&i=${imdbID}`
+      `https://www.omdbapi.com/?apikey=23df0941&i=${imdbID}`,
     );
     movie = await data.json();
     return movie;
@@ -42,16 +42,16 @@ async function renderMovie() {
   tmdbData = await getTmdbID(movie.imdbID);
   const iframeURL =
     tmdbData.type === 'movie'
-      ? `https://www.vidking.net/embed/movie/${tmdbData.tmdbID}?color=ff2a6d&autoPlay=true`
-      : `https://www.vidking.net/embed/tv/${tmdbData.tmdbID}/1/1?color=fb5607&autoPlay=true&nextEpisode=true&episodeSelector=true`;
+      ? `https://www.vidking.net/embed/movie/${tmdbData.tmdbID}?color=ff2a6dtrue`
+      : `https://www.vidking.net/embed/tv/${tmdbData.tmdbID}/1/1?color=fb5607&nextEpisode=true&episodeSelector=true`;
   document.getElementById('movie-information').innerHTML = `
         <iframe src="${iframeURL}" width="100%" height="600" frameborder="0" allowfullscreen> </iframe>
         <figure class = "movie-figure">
             <img src="${
               movie.Poster
             }" class = "movie-detailed-image" alt="Movie Poster of the movie ${
-    movie.Title
-  }">
+              movie.Title
+            }">
             <div class="ratings ratings-detailed">
             ${displayAllRatings(movie)}
           </div>
@@ -61,8 +61,8 @@ async function renderMovie() {
               <span class = "bold-text">Plot:</span> ${
                 movie.Plot
               } <button class = "plot-expander" onclick = "plotExpander('${
-    movie.imdbID
-  }')"> Know More (Spoilers) 
+                movie.imdbID
+              }')"> Know More (Spoilers) 
   <i class="fas fa-spinner movies-loading-spinner"></i>
   </button>
           </div>
@@ -102,7 +102,7 @@ async function renderMovie() {
   document.title = movie.Title;
   const favicon =
     document.querySelector(
-      "link[rel='icon']"
+      "link[rel='icon']",
     ); /* attribute value wala selector (select the link whose rel attribute is icon) */
   favicon.href = movie.Poster;
 }
@@ -130,31 +130,31 @@ function displayAllRatings(movie) {
       if (rating.Source === 'Internet Movie Database') {
         return `<a href = "https://www.imdb.com/title/${imdbID}/" target = "_blank"><img src = "assets/imdb.webp" width = "35" height = "35"></a>${rating.Value.slice(
           0,
-          rating.Value.indexOf('/')
+          rating.Value.indexOf('/'),
         )}`;
       }
       if (rating.Source === 'Rotten Tomatoes') {
         return parseFloat(rating.Value) >= 75
           ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/certified-fresh.png" width = "35" height = "35"></a>${rating.Value}`
           : parseFloat(rating.Value) >= 60
-          ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/fresh.png" width = "35" height = "35"></a>${rating.Value}`
-          : `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/rotten.png" width = "35" height = "35"></a>${rating.Value}`;
+            ? `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/fresh.png" width = "35" height = "35"></a>${rating.Value}`
+            : `<a href = "https://www.rottentomatoes.com/${slicedType}/${changedTitleTomato}" target = "_blank"><img src = "assets/rotten.png" width = "35" height = "35"></a>${rating.Value}`;
       }
       if (rating.Source === 'Metacritic') {
         return parseFloat(rating.Value) >= 60
           ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #54ac28ff;">${rating.Value.slice(
               0,
-              rating.Value.indexOf('/')
+              rating.Value.indexOf('/'),
             )}</div></a>`
           : parseFloat(rating.Value) >= 40
-          ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #D9B42C;">${rating.Value.slice(
-              0,
-              rating.Value.indexOf('/')
-            )}</div></a>`
-          : `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #e50e0eff;">${rating.Value.slice(
-              0,
-              rating.Value.indexOf('/')
-            )}</div></a>`;
+            ? `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #D9B42C;">${rating.Value.slice(
+                0,
+                rating.Value.indexOf('/'),
+              )}</div></a>`
+            : `<a href = "https://www.metacritic.com/${metaType}/${changedTitleMeta}" target = "_blank"><div class = "meta" style = "background-color: #e50e0eff;">${rating.Value.slice(
+                0,
+                rating.Value.indexOf('/'),
+              )}</div></a>`;
       }
     })
     .join('');
@@ -163,32 +163,30 @@ function displayAllRatings(movie) {
 async function plotExpander(id) {
   let movie;
   const data = await fetch(
-    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=full`
+    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=full`,
   );
   movie = await data.json();
-  document.getElementById(
-    'plot-not-detailed'
-  ).innerHTML = `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-lesspander" onclick = "plotLesspander('${movie.imdbID}')"> NOOO I CAN'T HANDLE IT!!! THE BEACON OF TRUTH IS TOO BRIGHT</button>`;
+  document.getElementById('plot-not-detailed').innerHTML =
+    `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-lesspander" onclick = "plotLesspander('${movie.imdbID}')"> NOOO I CAN'T HANDLE IT!!! THE BEACON OF TRUTH IS TOO BRIGHT</button>`;
 }
 
 async function plotLesspander(id) {
   let movie;
   const data = await fetch(
-    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=short`
+    `https://www.omdbapi.com/?apikey=23df0941&i=${id}&plot=short`,
   );
 
   movie = await data.json();
 
-  document.getElementById(
-    'plot-not-detailed'
-  ).innerHTML = `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-expander" onclick = "plotExpander('${movie.imdbID}')"> Want the red pill again?</button>`;
+  document.getElementById('plot-not-detailed').innerHTML =
+    `<span class = "bold-text">Plot:</span> ${movie.Plot}<button class = "plot-expander" onclick = "plotExpander('${movie.imdbID}')"> Want the red pill again?</button>`;
 }
 
 renderMovie();
 
 async function getTmdbID(imdbID) {
   const data = await fetch(
-    `https://api.themoviedb.org/3/find/${imdbID}?api_key=254c69a49b0450ae64a458e2d6b6b574&external_source=imdb_id`
+    `https://api.themoviedb.org/3/find/${imdbID}?api_key=254c69a49b0450ae64a458e2d6b6b574&external_source=imdb_id`,
   );
   let response = await data.json();
 
